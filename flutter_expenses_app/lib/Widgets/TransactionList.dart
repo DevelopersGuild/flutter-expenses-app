@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expenses_app/Models/Transaction.dart';
+import '../Widgets/TransactionItem.dart';
 import '../Data/transaction_data.dart';
 
 class TransactionList extends StatelessWidget {
@@ -7,7 +9,7 @@ class TransactionList extends StatelessWidget {
     return Container(
       child: ListView.builder(
         itemBuilder: (ctx, index) {
-          return Text(TransactionData.transactionData[index].title);
+          return TransactionItem(transaction: TransactionData.transactionData[index],);
         },
         itemCount: TransactionData.transactionData.length,
       ),
