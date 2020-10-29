@@ -1,49 +1,38 @@
-import 'package:expenses_flutter_proj/Models/transaction.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../Models/Transaction.dart';
 
 class TransactionItem extends StatelessWidget {
-  @required final Transaction transaction;
-
+  Transaction transaction;
   TransactionItem({this.transaction});
 
-  @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 15,
-      margin: EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 5,
-      ),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 30,
-          child: Padding(
-            padding: EdgeInsets.all(6),
-            child: FittedBox(child: Text("\$${transaction.amount}")),
+    return Padding(
+        padding: EdgeInsets.all(5),
+        child: Card(
+          elevation: 10,
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: 30,
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(transaction.amount.toString()),
+                ),
+              ),
+            ),
+            title: Text(transaction.title),
+            subtitle: Text(transaction.date.toString()),
+            trailing: FlatButton(
+              color: Theme.of(context).errorColor,
+              child: Text(
+                "Delete",
+                style: Theme.of(context).textTheme.button,
+              ),
+              onPressed: () {
+                print("delete");
+              },
+            ),
           ),
-        ),
-        title: Text(
-          transaction.title,
-          style: Theme.of(context).textTheme.headline1,
-        ),
-        subtitle: Text(
-          DateFormat.yMMMd().format(transaction.date),
-        ),
-        trailing: MediaQuery.of(context).size.width > 360
-            ? FlatButton.icon(
-                icon: Icon(Icons.delete),
-                label: Text("Delete"),
-                textColor: Theme.of(context).errorColor,
-                onPressed: () {},
-              )
-            : IconButton(
-                icon: Icon(Icons.delete),
-                color: Theme.of(context).errorColor,
-                onPressed: () {
-
-                }),
-      ),
-    );
+        ));
   }
 }
