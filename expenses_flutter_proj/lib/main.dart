@@ -39,7 +39,6 @@ class MyHomePage extends StatelessWidget {
           return GestureDetector(
             onTap: () {},
             child: NewTransaction(),
-            behavior: HitTestBehavior.opaque,
           );
         });
   }
