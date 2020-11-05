@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_expenses_app/Widgets/NewtTransaction.dart';
+import 'package:flutter_expenses_app/Data/transaction_data.dart';
+import 'package:flutter_expenses_app/Widgets/NewTransaction.dart';
+import 'package:provider/provider.dart';
 import 'Widgets/TransactionList.dart';
 
 void main() {
@@ -10,49 +12,46 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Expenses App',
-      theme: ThemeData(
-        errorColor: Colors.red,
-        primarySwatch: Colors.purple,
-        accentColor: Colors.amber,
-        textTheme: ThemeData.light().textTheme.copyWith(
-            headline1: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-            button: TextStyle(
-              color: Colors.white,
-            )),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: TransactionData(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Expenses App',
+        theme: ThemeData(
+          accentColor: Colors.yellow,
+            errorColor: Colors.red,
+            primarySwatch: Colors.purple,
+            textTheme: TextTheme(button: TextStyle(color: Colors.white))),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-
-  void startAddNewTransaction(BuildContext ctx) {
+  void startNewTransaction(BuildContext context) {
     showModalBottomSheet(
-        context: ctx,
+        context: context,
         builder: (_) {
-          return GestureDetector(
-            onTap: () {},
-            child: NewTransaction(),
-          );
+          return NewTransaction();
         });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: TransactionList(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => startAddNewTransaction(context),
+        onPressed: () {
+          startNewTransaction(context);
+        },
       ),
+      backgroundColor: Colors.white,
+      body: TransactionList(),
     );
   }
 }
