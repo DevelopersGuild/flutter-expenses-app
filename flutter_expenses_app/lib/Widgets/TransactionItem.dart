@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expenses_app/Data/transaction_data.dart';
+import 'package:provider/provider.dart';
 import '../Models/Transaction.dart';
 import 'package:intl/intl.dart';
 
 class TransactionItem extends StatelessWidget {
   Transaction transaction;
+
   TransactionItem({this.transaction});
 
   Widget build(BuildContext context) {
@@ -25,10 +28,17 @@ class TransactionItem extends StatelessWidget {
             subtitle: Text(DateFormat.yMMMd().format(transaction.date)),
             trailing: FlatButton(
               color: Theme.of(context).errorColor,
-              child: Text("Delete", style: Theme.of(context).textTheme.button,),
+              child: Text(
+                "Delete",
+                style: Theme.of(context).textTheme.button,
+              ),
               onPressed: () {
-                print("delete");
-              },
+                  Provider.of<TransactionData>(context, listen: false)
+                      .transactionData
+                      .removeWhere(
+                          (element) => element.id == transaction.id);
+                  Provider.of<TransactionData>(context, listen: false).notifyListeners();
+                },
             ),
           ),
         ));

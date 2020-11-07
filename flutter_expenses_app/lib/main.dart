@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expenses_app/Data/transaction_data.dart';
 import 'package:flutter_expenses_app/Widgets/NewTransaction.dart';
+import 'package:provider/provider.dart';
 import 'Widgets/TransactionList.dart';
 
 void main() {
@@ -10,13 +12,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Expenses App',
-      theme: ThemeData(
-          errorColor: Colors.red,
-          primarySwatch: Colors.green,
-          textTheme: TextTheme(button: TextStyle(color: Colors.white))),
-      home: MyHomePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: TransactionData(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Expenses App',
+        theme: ThemeData(
+            errorColor: Colors.red,
+            primarySwatch: Colors.purple,
+            accentColor: Colors.yellow,
+            textTheme: TextTheme(button: TextStyle(color: Colors.white))),
+        home: MyHomePage(),
+      ),
     );
   }
 }
