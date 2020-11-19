@@ -22,10 +22,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Expenses App',
         theme: ThemeData(
-            errorColor: Colors.red,
-            primarySwatch: Colors.purple,
-            accentColor: Colors.yellow,
-            textTheme: TextTheme(button: TextStyle(color: Colors.white))),
+          errorColor: Colors.red,
+          primarySwatch: Colors.purple,
+          accentColor: Colors.yellow,
+          textTheme: TextTheme(
+            button: TextStyle(color: Colors.white),
+            headline1: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
+          ),
+        ),
         home: MyHomePage(),
       ),
     );
@@ -35,6 +39,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   void startNewTransaction(BuildContext context) {
     showModalBottomSheet(
+      isScrollControlled: true,
         context: context,
         builder: (_) {
           return NewTransaction();
@@ -43,14 +48,19 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("Expenses App"),
         actions: [
-          IconButton(icon: Icon(Icons.add), onPressed: () {
-            startNewTransaction(context);
-          })
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                startNewTransaction(context);
+              })
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -61,11 +71,19 @@ class MyHomePage extends StatelessWidget {
         },
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Container(child: ChartGraph(), height: MediaQuery.of(context).size.height * 0.25,),
-          Container(child: TransactionList(), height: MediaQuery.of(context).size.height * 0.60,),
-        ],
+      body: Builder(
+        builder: (context) => Column(
+          children: [
+            Container(
+              child: ChartGraph(),
+              height: (height - Scaffold.of(context).appBarMaxHeight) * 0.3,
+            ),
+            Container(
+              child: TransactionList(),
+              height: (height - Scaffold.of(context).appBarMaxHeight)  * 0.7,
+            ),
+          ],
+        ),
       ),
     );
   }

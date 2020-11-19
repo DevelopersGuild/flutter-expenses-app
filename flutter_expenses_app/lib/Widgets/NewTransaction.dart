@@ -43,7 +43,15 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
+
+    double height = MediaQuery.of(context).size.height * 0.5;
+    double keyboardSize = MediaQuery.of(context).viewInsets.bottom;
+    if (keyboardSize != 0) {
+      height = MediaQuery.of(context).size.height * 0.3;
+    }
+
     return Container(
+      height: height + keyboardSize,
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Column(

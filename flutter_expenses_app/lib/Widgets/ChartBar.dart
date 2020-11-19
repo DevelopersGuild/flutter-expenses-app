@@ -14,6 +14,7 @@ class ChartBar extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(title),
         Container(
@@ -23,16 +24,16 @@ class ChartBar extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1),
-                  borderRadius: BorderRadius.circular(20),
-                  color: Theme.of(context).primaryColor
+                    border: Border.all(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).primaryColor
                 ),
               ),
               FractionallySizedBox(
                 heightFactor: 1 - amountPctTotal,
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20)),
                       color: Colors.grey
                   ),
                 ),
@@ -40,7 +41,7 @@ class ChartBar extends StatelessWidget {
             ],
           ),
         ),
-        Text(amount.toStringAsFixed(0)),
+        Text("\$${amount.toStringAsFixed(0)}"),
       ],
     );
   }
