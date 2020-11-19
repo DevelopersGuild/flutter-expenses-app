@@ -1,60 +1,47 @@
 import 'package:flutter/material.dart';
 
 class ChartBar extends StatelessWidget {
-  final String label;
-  final double spendingAmount;
-  final double spendingPctOfTotal;
 
-  ChartBar({this.label, this.spendingAmount, this.spendingPctOfTotal});
+  String title;
+  double amount;
+  double amountPctTotal;
+
+  ChartBar({this.title, this.amount, this.amountPctTotal});
 
   @override
   Widget build(BuildContext context) {
+
     double height = MediaQuery.of(context).size.height;
-      return Column(
-        children: <Widget>[
-          Container(
-            height: height * 0.025,
-            child: FittedBox(
-              child: Text("\$${spendingAmount.toStringAsFixed(0)}"),
-            ),
-          ),
-          Container(
-            height: height * 0.13,
-            width: 10,
-            child: Stack(
-              children: <Widget>[
-                Container(
+
+    return Column(
+      children: [
+        Text(title),
+        Container(
+          height: height * 0.15,
+          width: 10,
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey, width: 1),
+                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).primaryColor
+                ),
+              ),
+              FractionallySizedBox(
+                heightFactor: 1 - amountPctTotal,
+                child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    ),
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                    borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                      color: Colors.grey
                   ),
                 ),
-                FractionallySizedBox(
-                  heightFactor: 1 - spendingPctOfTotal,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color:   Color.fromRGBO(220, 220, 220, 1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
-
-          Container(
-            height: height * 0.025,
-            child: FittedBox(
-                child: Text(label)),
-          ),
-        ],
-      );
+        ),
+        Text(amount.toStringAsFixed(0)),
+      ],
+    );
   }
-
 }
