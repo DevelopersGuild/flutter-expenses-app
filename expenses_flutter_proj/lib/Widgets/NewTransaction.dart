@@ -12,34 +12,45 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   TextEditingController titleController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+
   DateTime selectedDate = DateTime.now();
+
+  void presentDatePicker(BuildContext context) async {
+    DateTime picked = await showDatePicker(
+        context: context,
+        firstDate: DateTime(2015, 1),
+        initialDate: selectedDate,
+        lastDate: DateTime.now());
+
+    setState(() {
+      if (picked != null) {
+        selectedDate = picked;
+      }
+    });
+  }
+
+  void submitData(BuildContext context) {
+    Provider.of<TransactionData>(context, listen: false).transactionData.add(Transaction(
+        title: titleController.text,
+        amount: double.parse(amountController.text),
+        date: selectedDate,
+        id: DateTime.now().toString()));
+
+    Provider.of<TransactionData>(context, listen: false).notifyListeners();
+
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
-    void submitData() {
-      Provider.of<TransactionData>(context, listen: false).transactionData.add(Transaction(
-          title: titleController.text,
-          date: selectedDate,
-          amount: double.parse(amountController.text), id: DateTime.now().toString()),);
-      Provider.of<TransactionData>(context, listen: false).notifyListeners();
-
-      Navigator.of(context).pop();
-    }
-
-    void presentDatePicker() async {
-      DateTime picked = await showDatePicker(
-          context: context,
-          initialDate: selectedDate,
-          firstDate: DateTime(2015, 8),
-          lastDate: DateTime.now());
-
-      if (picked != null)
-        setState(() {
-          selectedDate = picked;
-        });
+    double height =  MediaQuery.of(context).size.height * 0.5;
+    double keyboardPadding = MediaQuery.of(context).viewInsets.bottom;
+    if (keyboardPadding != 0 ) {
+      height = MediaQuery.of(context).size.height * 0.3;
     }
 
     return Container(
+      height: height + keyboardPadding,
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -53,42 +64,35 @@ class _NewTransactionState extends State<NewTransaction> {
               controller: amountController,
               keyboardType: TextInputType.number,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      selectedDate == null
-                          ? "No Date Chosen"
-                          : "Picked Date: ${DateFormat.yMMMd().format(selectedDate)}",
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    "Current Date: ${DateFormat.yMMMd().format(selectedDate)}"),
+                FlatButton(
+                  color: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    presentDatePicker(context);
+                  },
+                  child: Text(
+                    "Choose Date",
+                    style: Theme.of(context).textTheme.button,
                   ),
-                  FlatButton(
-                    color: Theme.of(context).accentColor,
-                    child: Text("Choose Date"),
-                    onPressed: () {
-                      presentDatePicker();
-                    },
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    child: Text(
-                      "Add Transactiomion",
-                      style: Theme.of(context).textTheme.button,
-                    ),
-                    onPressed: () {
-                      submitData();
-                    },
+                FlatButton(
+                  onPressed: () {
+                    submitData(context);
+                  },
+                  child: Text(
+                    "Submit",
+                    style: Theme.of(context).textTheme.button,
                   ),
+                  color: Colors.green,
                 ),
               ],
             )
