@@ -8,29 +8,33 @@ import 'package:intl/intl.dart';
 class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<Transaction> transactionData =
+    List<Transaction> transactionDataRev =
         Provider.of<TransactionData>(context, listen: true)
             .transactionData
             .reversed
             .toList();
     double totalSpend = 0;
-    for (int i = 0; i < 7 && i < transactionData.length; i++) {
-      totalSpend += transactionData[i].amount;
+    for (int i = 0; i < 7 && i < transactionDataRev.length; i++) {
+      totalSpend += transactionDataRev[i].amount;
     }
-    return Card(
-      elevation: 6,
-      margin: EdgeInsets.all(10),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          for (int i = 0; i < 7 && i < transactionData.length; i++)
-            ChartBar(
-              label: transactionData[i].title,
-              spendingAmount: transactionData[i].amount,
-              spendingPctOfTotal: transactionData[i].amount / totalSpend,
-            )
-        ]),
-      ),
+      return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: Card(
+          elevation: 6,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              for (int i = 0; i < 7 && i < transactionDataRev.length; i++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: ChartBar(
+                    title: transactionDataRev[i].title,
+                    amount: transactionDataRev[i].amount,
+                    amountPctTotal: transactionDataRev[i].amount / totalSpend,
+                  ),
+                )
+            ],
+          )),
     );
   }
 }
